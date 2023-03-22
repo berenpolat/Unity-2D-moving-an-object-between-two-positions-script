@@ -1,29 +1,26 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectMovementScript : MonoBehaviour
+public class EnemyController : MonoBehaviour
 {
+
     public float speed = 2.0f;
     public float minX = -5.0f;
     public float maxX = 5.0f;
 
-    private Vector3 targetPosition;
-
-    private void Start()
-    {
-        // Set the initial target position to the maximum x value
-        targetPosition = new Vector3(maxX, transform.position.y, transform.position.z);
-    }
+    private bool movingRight = true;
 
     private void Update()
     {
-        // Move the object towards the target position
-        transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
+        // Move the object towards the current target position
+        float targetX = movingRight ? maxX : minX;
+        transform.position = Vector3.MoveTowards(transform.position, new Vector3(targetX, transform.position.y, transform.position.z), speed * Time.deltaTime);
 
-        // If the object has reached the target position, switch to the other target position
-        if (transform.position == targetPosition)
+        // If the object has reached the current target position, switch direction
+        if (transform.position.x == targetX)
         {
-            targetPosition = (targetPosition.x == maxX) ? new Vector3(minX, transform.position.y, transform.position.z) : new Vector3(maxX, transform.position.y, transform.position.z);
+            movingRight = !movingRight;
         }
     }
 }
-
